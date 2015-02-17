@@ -12,6 +12,12 @@ data = np.genfromtxt('./data/kaggle_train_wc.csv', delimiter = ',')
 x, y = data[:, :col-1], data[:, col-1]
 xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size = 0.2)
 # specify parameters
+C_range = 10.0 ** np.arange(-2, 9)
+gamma_range = 10.0 ** np.arange(-5, 4)
+kernel_options = ('rbf','linear','poly','sigmoid')
+coef0_range = range(1,11)
+parameters = dict(C=C_range, gamma=gamma_range,
+    kernel=kernel_options, coef0=coef0_range)
 parameters = {'kernel':('rbf','linear','poly','sigmoid'),
     'C':[0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000],
     }

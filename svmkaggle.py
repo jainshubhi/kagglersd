@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cross_validation import train_test_split
 from sklearn.svm import SVC
@@ -13,14 +14,11 @@ x, y = data[:, :col-1], data[:, col-1]
 xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size = 0.2)
 # specify parameters
 C_range = 10.0 ** np.arange(-2, 9)
-gamma_range = 10.0 ** np.arange(-5, 4)
-kernel_options = ('rbf','linear','poly','sigmoid')
+gamma_range = 10.0 ** np.arange(-2, 4)
+kernel_options = ('linear','poly')
 coef0_range = range(1,11)
 parameters = dict(C=C_range, gamma=gamma_range,
-    kernel=kernel_options, coef0=coef0_range)
-parameters = {'kernel':('rbf','linear','poly','sigmoid'),
-    'C':[0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000],
-    }
+                  kernel=kernel_options, coef0=coef0_range)
 # run svm
 svr = SVC()
 clf = GridSearchCV(svr, parameters)

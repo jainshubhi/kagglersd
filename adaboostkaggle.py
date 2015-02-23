@@ -6,6 +6,7 @@ from sklearn.ensemble import AdaBoostClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 from sklearn.grid_search import GridSearchCV
 
@@ -64,4 +65,4 @@ print("AdaBoost is: ",  ada_scores.mean())
 print("Multinomial Naive Bayes is: ", mul_scores.mean())
 print("Decision Trees is: ", dtc_scores.mean())
 print("Extra Trees is: ", etc_scores.mean())
-print("Random Forest is: ", rfc_scores.mean()) 
+print("Random Forest is: ", rfc_scores.mean())

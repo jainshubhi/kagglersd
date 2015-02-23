@@ -24,7 +24,7 @@ model = svr.fit(x, y)
 test_pred = list(model.predict(xtest))
 
 myfile = open('svc_pred.csv', 'wb')
-wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+wr = csv.writer(myfile)
 wr.writerow(test_pred)
 
 # final_prediction = []

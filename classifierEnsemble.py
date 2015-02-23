@@ -1,12 +1,13 @@
 import numpy as np
 from sklearn.cross_validation import cross_val_score
-from sklearn.ensemble import AdaBoostClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import BaggingClassifier
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import (ExtraTreesClassifier,
+							  GradientBoostingClassifier,
+							  BaggingClassifier,
+							  AdaBoostClassifier) 
 from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
 import csv
 # Import the word count data for training.
 data = np.genfromtxt('./data/kaggle_train_wc.csv', delimiter = ',')
@@ -23,6 +24,15 @@ xtf, ytf = data[:, :col-1], data[:, col-1]
 # Import the test data
 xtest_wc = np.genfromtxt('./data/kaggle_test_wc.csv', delimiter = ',')
 xtest_tf = np.genfromtxt('./data/kaggle_test_tf_idf.csv', delimiter = ',')
+
+# Train a KNeighbors clustering model
+neighbors = [i*5 for i in range(1, 21)];
+for i in neighbors:
+	Kn = KNeighborsClassifier(n_neighbors = i, weights = 'distance')
+	Kn_score_wc = cross_val_score(Kn, xwc, ywc, cv = 5)
+	Kn_score_tf = cross_val_score(Kn, xtf, ytf, cv = 5)
+	print('Kneighbors WC: ', i, Kn_score_wc.mean())
+	print('Kneighbors TF-IDF: ', i, Kn_score_tf.mean())
 
 # Train a MultinomialNB Model
 '''mnb = MultinomialNB()
@@ -65,11 +75,11 @@ ada_score_tf = cross_val_score(ada, xtf, ytf)
 print('ADA WC: ', ada_score_wc.mean())
 print('ADA TF-IDF: ', ada_score_tf.mean())'''
 
-n_est = [i*10 for i in range(8, 21)]
+'''n_est = [i*10 for i in range(8, 21)]
 
 for i in n_est:
     gbc = GradientBoostingClassifier(n_estimators = i)
     gbc_score_wc = cross_val_score(gbc, xwc, ywc, cv = 5)
     gbc_score_tf = cross_val_score(gbc, xtf, ytf, cv = 5)
     print('GBC WC: ', i, gbc_score_wc.mean())
-    print('GBC TF-IDF: ',i,  gbc_score_tf.mean())
+    print('GBC TF-IDF: ',i,  gbc_score_tf.mean())'''

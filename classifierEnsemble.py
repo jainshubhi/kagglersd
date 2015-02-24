@@ -9,6 +9,7 @@ from sklearn.ensemble import (ExtraTreesClassifier,
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 import csv
+
 # Import the word count data for training.
 data = np.genfromtxt('./data/kaggle_train_wc.csv', delimiter = ',')
 (row, col) = data.shape
@@ -26,13 +27,39 @@ xtest_wc = np.genfromtxt('./data/kaggle_test_wc.csv', delimiter = ',')
 xtest_tf = np.genfromtxt('./data/kaggle_test_tf_idf.csv', delimiter = ',')
 
 # Train a KNeighbors clustering model
-neighbors = [i*5 for i in range(1, 21)];
-for i in neighbors:
-	Kn = KNeighborsClassifier(n_neighbors = i, weights = 'distance')
-	Kn_score_wc = cross_val_score(Kn, xwc, ywc, cv = 5)
-	Kn_score_tf = cross_val_score(Kn, xtf, ytf, cv = 5)
-	print('Kneighbors WC: ', i, Kn_score_wc.mean())
-	print('Kneighbors TF-IDF: ', i, Kn_score_tf.mean())
+# Best Result was with TF-IDF and i = 20 => 0.8435
+'''neighbors = [i*5 for i in range(1, 21)];
+for i in neighbors:'''
+'''Kn = KNeighborsClassifier(n_neighbors = 20, weights = 'distance')
+Kn_score_wc = cross_val_score(Kn, xwc, ywc, cv = 5)
+Kn_score_tf = cross_val_score(Kn, xtf, ytf, cv = 5)
+print('Kneighbors WC: ', 20, Kn_score_wc.mean())
+print('Kneighbors TF-IDF: ', 20, Kn_score_tf.mean())'''
+
+# Try other GBC parameters
+# Best score returned by these parameters: WC = 0.932, TF-IDF = 0.929
+gbc = GradientBoostingClassifier(learning_rate = 0.05, n_estimators = 2000, max_depth = 5, min_samples_leaf = 45, verbose = 1)
+gbc_score_wc = cross_val_score(gbc, xwc, ywc, cv = 5)
+# gbc_score_tf = cross_val_score(gbc, xtf, ytf, cv = 5)
+print('GBC WC: ', 2000, gbc_score_wc.mean())
+# print('GBC TF-IDF: ', 2000,  gbc_score_tf.mean())
+
+# modelKn = Kn.fit(xtf, ytf)
+# Kn_pred = list(modelKn.predict(xtest_tf))
+# modelGbc = gbc.fit(xtf, ytf)
+modelGbc = gbc.fit(xwc, ywc)
+# gbc_pred = list(modelGbc.predict(xtest_tf))
+gbc_pred = list(modelGbc.predict(xtest_wc))
+
+# Write output
+# myfile1 = open('Kn_pred_r.csv', 'wb')
+myfile2 = open('GBC_pred_wc.csv', 'wb')
+# wr1 = csv.writer(myfile1)
+wr2 = csv.writer(myfile2)
+# wr1.writerow(Kn_pred)
+wr2.writerow(gbc_pred)
+# myfile1.close()
+myfile2.close()
 
 # Train a MultinomialNB Model
 '''mnb = MultinomialNB()

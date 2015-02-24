@@ -1,0 +1,21 @@
+# Simple script to parse incorrect output file
+
+myfile = open('GBC_pred_wc.csv', 'r')
+
+lines = myfile.readlines()
+tmp = lines[0]
+
+preds = tmp.split(',')
+
+ID = 1
+
+output = open('GBC_pred_wc_corrected.csv', 'wb')
+output.write("id,prediction" + "\n")
+
+for elem in preds:
+    newElem = int(float(elem))
+    output.write(str(ID) + "," + str(newElem) + "\n")
+    ID += 1
+
+output.close()
+myfile.close()
